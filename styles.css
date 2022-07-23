@@ -1,0 +1,32 @@
+/* Rectangle 3 */
+
+.solarimg{
+    position: absolute;
+    width: 99%;
+    height: 80%;
+    left: 0px;
+    top: 10%;
+    
+    background: url(solar.jpg);
+    
+}
+
+
+/* FIND YOUR RENEWABLE FUTURE... */
+.headtitle{
+
+    position: absolute;
+    width: 1377px;
+    height: 678px;
+    left: 25px;
+    top: 219px;
+    
+    font-family: 'Inria Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 150px;
+    line-height: 180px;
+    
+    color: #FFFFFF;
+        
+}
