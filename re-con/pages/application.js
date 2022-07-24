@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 export default function App() {
@@ -19,7 +18,8 @@ export default function App() {
 
           </main>
     
-          <footer className={styles.footer}>
+          {/* I don't think we need this */}
+          {/* <footer className={styles.footer}>
             <a
               href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
               target="_blank"
@@ -27,10 +27,10 @@ export default function App() {
             >
               Powered by{' '}
               <span className={styles.logo}>
-                <Image src="/ReCon.png" alt="ReCon" width={72} height={16} />
+                <Image src="/ReCon.png" alt="ReCon"/>
               </span>
             </a>
-          </footer>
+          </footer> */}
         </div>
       )
 }

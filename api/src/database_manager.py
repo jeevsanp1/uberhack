@@ -1,12 +1,15 @@
 import sqlite3
-conn = sqlite3.connect("SUPPLIERS.db")
+
+conn = sqlite3.connect("../SUPPLIERS.db")
 c=conn.cursor()
 def get_suppliers(service,location):
     c.execute("SELECT Name FROM Suppliers WHERE ((Location = "+location+" )  AND (Services = "+service+"))" )
     return [i[0] for i in c.fetchall()]
+
 def get_services(supplier):
     c.execute("SELECT Services FROM Suppliers WHERE Name ="+supplier)
     return [i[0] for i in c.fetchall()]
+
 def get_costs(supplier):
     c.execute("SELECT Cost FROM Suppliers WHERE Name ="+supplier)
     strng = c.fetchall()[0][0]

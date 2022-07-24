@@ -1,11 +1,9 @@
-import Head from 'next/head'
-import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 
 const Nav = () =>{
     return(
-        <nav className={styles.nav}>
+        <nav style={{ position: 'fixed', top: 0 }} className={styles.nav}>
             <ul className={styles.ul}>
                 <li className={styles.li}>
                     <Link href='/'>Home</Link>
