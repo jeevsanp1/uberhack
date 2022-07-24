@@ -1,5 +1,39 @@
+.nav {
+ background-color: cadetblue;
+}
+.ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgb(82, 199, 223);
+}
+.li{
+  float: left;
+  padding-right: 15%;
+  padding-left: 5%;
+}
+.li a {
+  display: block;
+  padding: 2%;
+  font-size: 200%;
+}
+
+.li a:hover{
+  display: block;
+  padding: 2%;
+  background-color: #dddddd;
+}
+.li a:active {
+  background-color: #04AA6D;
+}
 .container {
+  min-height: 100vh;
   padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .main {
@@ -12,7 +46,9 @@
   align-items: center;
 }
 .welcome{
-  background-image: url('solar.jpg');
+  background: #59574f;
+  height: 100%;
+  width: 100%;
 }
 .footer {
   display: flex;
@@ -45,11 +81,12 @@
   margin: 0;
   line-height: 1.15;
   font-size: 4rem;
+  text-align: left;
 }
 
 .title,
 .description {
-  text-align: center;
+  text-align: left;
 }
 
 .description {
