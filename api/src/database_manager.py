@@ -22,5 +22,4 @@ def get_costs(supplier):
         strng = strng[strng.find(",")+2:]
 
     return(dict(zip(services, costs)))
-print(get_costs("'Supplier 1'"))
-conn.commit()
+conn.close()
