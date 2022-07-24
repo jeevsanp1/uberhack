@@ -105,14 +105,30 @@ def past_month_stats(base_url):
     }
 
 
-@app.route('/<lat>/<lng>/<river_near>')
-def getter_specific(lat, lng, river_near):
-    # geothermal_score = 0
-    scores = {
-        "solar_energy_score": 0,
-        "hydroelectricity_score": 0,
-        "wind_energy_score": 0
+def return_scores(average_scores):
+
+    ideal_temperature = 77
+    ideal_windspeeds = 13
+    ideal_cloudcoverage = 0
+
+    return {
+        'wind': 0,
+        'solar': 0,
+        'hydro': 0,
+        # 'geo': 0
     }
+
+
+def get_pricing():
+    return {
+        'wind': 0,
+        'solar': 0,
+        'hydro': 0
+    }
+
+
+@app.route('/<lat>/<lng>/<river_near>/<max_budget>')
+def getter_specific(lat, lng, river_near, min_budget, max_budget):
 
     history_base_url = get_weather_urls_by_lat_long(lat, lng)['history']
     forecast_url = get_weather_urls_by_lat_long(lat, lng)['forecast']
@@ -123,17 +139,22 @@ def getter_specific(lat, lng, river_near):
 
     s = past_month_stats(history_base_url)
 
-    ideal_temperature = 77
-    ideal_windspeeds = 13
-    ideal_cloudcoverage = 0
-
     average_scores = {
         'cloud': (forecast_stats['cloud'] + s['cloud']) / 2,
         'wind': (forecast_stats['wind'] + s['wind']) / 2,
         'temp': (forecast_stats['temp'] + s['temp']) / 2,
         'precip': (forecast_stats['precip'] + s['temp']) / 2,
         'precip_change': (forecast_stats['precip_change'] + s['precip_change']) / 2,
-        'temp_change': (forecast_stats['temp_change'] + s['temp_change']) / 2
+        'temp_change': (forecast_stats['temp_change'] + s['temp_change']) / 2,
+        'river': river_near
     }
 
-    return "noice"
+    prices = get_pricing()
+
+    scores = return_scores(average_scores)
+
+    for key in prices:
+        if prices[key] <= max_budget:
+            scores[key] += 50
+
+    return scores
