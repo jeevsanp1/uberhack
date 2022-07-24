@@ -6,7 +6,7 @@
   margin: 0;
   overflow: hidden;
   background-color: rgb(82, 199, 223);
-  text-decoration: none;
+  width: 700%;
 }
 .li{
   float: left;
@@ -60,6 +60,9 @@
   align-items: center;
 }
 
+#first{
+  padding-right: 1%;
+}
 .footer a {
   display: flex;
   justify-content: center;
@@ -83,6 +86,7 @@
   line-height: 1.15;
   font-size: 9rem;
   text-align: left;
+  padding-top: 3%;
 }
 
 .title,

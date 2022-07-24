@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 export default function App() {
@@ -17,21 +18,19 @@ export default function App() {
             </h1> 
               
             <form action="/send-data-here" method="post">
-            <ul>
-              <li><label for="first">Longitude: </label>
-              <input type="text" id="first" name="first" /></li>
-              <li><label for="first">Latitude: </label>
-              <input type="text" id="first" name="first" /></li>
-              <li><label for="first">State: </label>
-              <input type="text" id="first" name="first" /></li>
-              <li><button type="submit">Submit</button></li>
-            </ul>
+            
+              <label for="first">Longitude: </label>
+              <input type="text" id="first" name="first" />
+              <label for="first">Latitude: </label>
+              <input type="text" id="first" name="first" />
+              <label for="first">State: </label>
+              <input type="text" id="first" name="first" />
+              <button type="submit">Submit</button>
             </form>
 
           </main>
     
-          {/* I don't think we need this */}
-          {/* <footer className={styles.footer}>
+          <footer className={styles.footer}>
             <a
               href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
               target="_blank"
@@ -39,10 +38,10 @@ export default function App() {
             >
               Powered by{' '}
               <span className={styles.logo}>
-                <Image src="/ReCon.png" alt="ReCon"/>
+                <Image src="/ReCon.png" alt="ReCon" width={72} height={16} />
               </span>
             </a>
-          </footer> */}
+          </footer>
         </div>
       )
 }
