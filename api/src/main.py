@@ -20,6 +20,8 @@ weather_headers = {
     - HydroElectricity
         - Wind Speeds
         - River Near
+        - Change of Temperature
+        - Change of Precipitation
         
     - Geothermal
         - ?
@@ -43,16 +45,28 @@ def forecast_usage(f):
     avg_cloud_coverage = 0
     avg_wind_speed = 0
     avg_temp = 0
+    avg_precip_intensity = 0
     tot = len(f)
     for i in f:
-        avg_temp += int(i['temperature'])
-        avg_cloud_coverage += int(i['cloudCover'])
-        avg_wind_speed += (int(i['windSpeed'] + i['windGust'])) / 2
+        avg_temp += float(i['temperature'])
+        avg_cloud_coverage += float(i['cloudCover'])
+        avg_wind_speed += float(i['windSpeed'])
+        avg_precip_intensity += float(i['precipIntensity'])
+
+    avg_diffs_temp = 0
+    avg_diffs_precip = 0
+
+    for i in f:
+        avg_diffs_temp = avg_temp - float(i['temperature'])
+        avg_diffs_precip = avg_precip_intensity - float(i['precipIntensity'])
 
     return {
         'cloud': avg_cloud_coverage / tot,
         'wind': avg_wind_speed / tot,
-        'temp': avg_temp / tot
+        'temp': avg_temp / tot,
+        'temp_change': avg_diffs_temp / tot,
+        'precip': avg_precip_intensity / tot,
+        'precip_change': avg_diffs_precip / tot
     }
 
 
@@ -62,7 +76,10 @@ def past_month_stats(base_url):
     cur_stats = {
         'cloud': 0,
         'wind': 0,
-        'temp': 0
+        'temp': 0,
+        'temp_change': 0,
+        'precip': 0,
+        'precip_change': 0
     }
 
     tot = 3
@@ -73,21 +90,29 @@ def past_month_stats(base_url):
         cur_stats['cloud'] += new_stats['cloud']
         cur_stats['temp'] += new_stats['temp']
         cur_stats['wind'] += new_stats['wind']
+        cur_stats['precip'] += new_stats['precip']
+        cur_stats['temp_change'] += new_stats['temp_change']
+        cur_stats['precip_change'] += new_stats['precip_change']
         dif += 7
 
     return {
         'cloud': cur_stats['cloud'] / tot,
         'wind': cur_stats['wind'] / tot,
-        'temp': cur_stats['temp'] / tot
+        'temp': cur_stats['temp'] / tot,
+        'precip': cur_stats['precip'] / tot,
+        'precip_change': cur_stats['precip_change'] / tot,
+        'temp_change': cur_stats['temp_change'] / tot
     }
 
 
 @app.route('/<lat>/<lng>/<river_near>')
 def getter_specific(lat, lng, river_near):
-    geothermal_score = 0
-    solar_energy_score = 0
-    hydroelecricity_score = 0
-    wind_energy_score = 0
+    # geothermal_score = 0
+    scores = {
+        "solar_energy_score": 0,
+        "hydroelectricity_score": 0,
+        "wind_energy_score": 0
+    }
 
     history_base_url = get_weather_urls_by_lat_long(lat, lng)['history']
     forecast_url = get_weather_urls_by_lat_long(lat, lng)['forecast']
@@ -98,8 +123,17 @@ def getter_specific(lat, lng, river_near):
 
     s = past_month_stats(history_base_url)
 
-    return {
-        'forecast': forecast_stats,
-        'past': s
+    ideal_temperature = 77
+    ideal_windspeeds = 13
+    ideal_cloudcoverage = 0
+
+    average_scores = {
+        'cloud': (forecast_stats['cloud'] + s['cloud']) / 2,
+        'wind': (forecast_stats['wind'] + s['wind']) / 2,
+        'temp': (forecast_stats['temp'] + s['temp']) / 2,
+        'precip': (forecast_stats['precip'] + s['temp']) / 2,
+        'precip_change': (forecast_stats['precip_change'] + s['precip_change']) / 2,
+        'temp_change': (forecast_stats['temp_change'] + s['temp_change']) / 2
     }
 
+    return "noice"
