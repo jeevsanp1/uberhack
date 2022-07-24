@@ -6,6 +6,7 @@
   margin: 0;
   overflow: hidden;
   background-color: rgb(82, 199, 223);
+  text-decoration: none;
 }
 .li{
   float: left;

@@ -13,16 +13,22 @@ export default function App() {
           </Head>
     
           <main className={styles.main}>
-          <div className={styles.inwin}>
             <h1 className={styles.apptitle}>
                 Renewable Energy Consultant
-            </h1>   
+            </h1> 
+              
             <form action="/send-data-here" method="post">
-              <label for="first">Zip Code: </label>
-              <input type="text" id="first" name="first" />
-              <button type="submit">Submit</button>
+            <ul>
+              <li><label for="first">Longitude: </label>
+              <input type="text" id="first" name="first" /></li>
+              <li><label for="first">Latitude: </label>
+              <input type="text" id="first" name="first" /></li>
+              <li><label for="first">State: </label>
+              <input type="text" id="first" name="first" /></li>
+              <li><button type="submit">Submit</button></li>
+            </ul>
             </form>
-          </div>
+
           </main>
     
           <footer className={styles.footer}>
