@@ -7,14 +7,8 @@ const Nav = () =>{
     return(
         <nav className={styles.nav}>
             <ul className={styles.ul}>
-                <li>
-                    <img src="ReCon(1).png"></img>
-                </li>
                 <li className={styles.li}>
                     <Link href='/'>Home</Link>
-                </li>
-                <li className={styles.li}>
-                    <Link href='/about'>About</Link>
                 </li>
                 <li className={styles.li}>
                     <Link href='/application'>Consult</Link>
