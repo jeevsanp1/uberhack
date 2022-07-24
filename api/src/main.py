@@ -1,7 +1,9 @@
+import math
+
 import requests
 from flask import Flask
 import datetime
-
+from src.helper import solar_price, hydro_price, wind_price
 
 app = Flask(__name__)
 
@@ -10,7 +12,7 @@ weather_headers = {
 }
 
 '''
-    - Solar Energy
+    - Solar Energy (Done)
         - Temperature
         - Cloud Coverage
         
@@ -41,6 +43,7 @@ def get_weather_urls_by_lat_long(lat, long):
 def home():
     return "Hi"
 
+
 def forecast_usage(f):
     avg_cloud_coverage = 0
     avg_wind_speed = 0
@@ -57,18 +60,17 @@ def forecast_usage(f):
     avg_diffs_precip = 0
 
     for i in f:
-        avg_diffs_temp = avg_temp - float(i['temperature'])
-        avg_diffs_precip = avg_precip_intensity - float(i['precipIntensity'])
+        avg_diffs_temp += (avg_temp / tot) - float(i['temperature'])
+        avg_diffs_precip += (avg_precip_intensity / tot) - float(i['precipIntensity'])
 
     return {
         'cloud': avg_cloud_coverage / tot,
         'wind': avg_wind_speed / tot,
         'temp': avg_temp / tot,
         'temp_change': avg_diffs_temp / tot,
-        'precip': avg_precip_intensity / tot,
-        'precip_change': avg_diffs_precip / tot
+        'precip': abs(avg_precip_intensity / tot),
+        'precip_change': abs(avg_diffs_precip / tot)
     }
-
 
 def past_month_stats(base_url):
     dif = 0
@@ -82,7 +84,7 @@ def past_month_stats(base_url):
         'precip_change': 0
     }
 
-    tot = 3
+    tot = 2
 
     for i in range(tot):
         url = base_url + f'&from={str(datetime.datetime.now() - datetime.timedelta(days=(dif+6))).split(".")[0]}&to={str(datetime.datetime.now() - datetime.timedelta(days=dif)).split(".")[0]}'
@@ -106,29 +108,86 @@ def past_month_stats(base_url):
 
 
 def return_scores(average_scores):
-
     ideal_temperature = 77
     ideal_windspeeds = 13
     ideal_cloudcoverage = 0
 
+    ideal_precip_change = 0.125
+    ideal_temp_change = 0.125
+
+    solar_score = 0
+    wind_score = 0
+    hydro_score = 0
+
+    temp_dif = ideal_temperature - average_scores['temp']
+    if temp_dif < 0:
+        solar_score -= temp_dif * 5
+    else:
+        solar_score += temp_dif * 10
+
+    cloud_dif = ideal_cloudcoverage - average_scores['cloud']
+    solar_score -= cloud_dif * 100
+
+    wind_dif = ideal_windspeeds - average_scores['wind']
+    if wind_dif < 0:
+        wind_score -= wind_dif * 5
+    else:
+        wind_score += wind_dif * 10
+
+    if average_scores['river']:
+        hydro_score += 75
+
+    precip_change_dif = average_scores['precip_change'] - ideal_precip_change
+    temp_change_dif = average_scores['temp_change'] - ideal_temp_change
+
+    if temp_change_dif > 0:
+        hydro_score += temp_change_dif * 10
+    else:
+        hydro_score -= temp_change_dif * 5
+
+    if precip_change_dif > 0:
+        hydro_score += precip_change_dif * 10
+    else:
+        hydro_score -= precip_change_dif * 5
+
     return {
-        'wind': 0,
-        'solar': 0,
-        'hydro': 0,
-        # 'geo': 0
+        'wind': wind_score,
+        'solar': solar_score,
+        'hydro': hydro_score,
     }
 
 
-def get_pricing():
+def get_pricing(state):
+    state_names = ["Alaska", "Alabama", "Arkansas", "American Samoa", "Arizona", "California", "Colorado",
+                   "Connecticut", "District ", "of Columbia", "Delaware", "Florida", "Georgia", "Guam", "Hawaii",
+                   "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", "Kentucky", "Louisiana", "Massachusetts",
+                   "Maryland", "Maine", "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", "North Carolina",
+                   "North Dakota", "Nebraska", "New Hampshire", "New Jersey", "New Mexico", "Nevada", "New York",
+                   "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Puerto Rico", "Rhode Island", "South Carolina",
+                   "South Dakota", "Tennessee", "Texas", "Utah", "Virginia", "Virgin Islands", "Vermont", "Washington",
+                   "Wisconsin", "West Virginia", "Wyoming"]
+
+    requests.get('https://www.google.com/search?q=average+price+of+solar+panel+in+florida')
+
+    hydro_cost = None
+    solar_cost = None
+    wind_cost = None
+
+    for s in state_names:
+        if s.upper() == state.upper():
+            hydro_cost = hydro_price(state)
+            solar_cost = solar_price(state)
+            wind_cost = wind_price(state)
+
     return {
-        'wind': 0,
-        'solar': 0,
-        'hydro': 0
+        'wind': wind_cost,
+        'solar': solar_cost,
+        'hydro': hydro_cost
     }
 
 
-@app.route('/<lat>/<lng>/<river_near>/<max_budget>')
-def getter_specific(lat, lng, river_near, min_budget, max_budget):
+@app.route('/<lat>/<lng>/<river_near>/<max_budget>/<state>')
+def getter_specific(lat, lng, river_near, max_budget, state):
 
     history_base_url = get_weather_urls_by_lat_long(lat, lng)['history']
     forecast_url = get_weather_urls_by_lat_long(lat, lng)['forecast']
@@ -139,6 +198,16 @@ def getter_specific(lat, lng, river_near, min_budget, max_budget):
 
     s = past_month_stats(history_base_url)
 
+    print(forecast_stats)
+    print(s)
+
+    river = False
+
+    if river_near.upper() == "TRUE":
+        river = True
+    else:
+        river = False
+
     average_scores = {
         'cloud': (forecast_stats['cloud'] + s['cloud']) / 2,
         'wind': (forecast_stats['wind'] + s['wind']) / 2,
@@ -146,12 +215,16 @@ def getter_specific(lat, lng, river_near, min_budget, max_budget):
         'precip': (forecast_stats['precip'] + s['temp']) / 2,
         'precip_change': (forecast_stats['precip_change'] + s['precip_change']) / 2,
         'temp_change': (forecast_stats['temp_change'] + s['temp_change']) / 2,
-        'river': river_near
+        'river': river
     }
 
-    prices = get_pricing()
+    print(average_scores)
+
+    prices = get_pricing(state)
 
     scores = return_scores(average_scores)
+
+    max_budget = float(max_budget)
 
     for key in prices:
         if prices[key] <= max_budget:
