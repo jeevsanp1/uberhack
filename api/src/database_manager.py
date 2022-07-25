@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("../SUPPLIERS.db")
+conn = sqlite3.connect("api\src\SUPPLIERS.db")
 c=conn.cursor()
 def get_suppliers(service,location):
     c.execute("SELECT Name FROM Suppliers WHERE ((Location = "+location+" )  AND (Services = "+service+"))" )
@@ -25,4 +25,6 @@ def get_costs(supplier):
         strng = strng[strng.find(",")+2:]
 
     return(dict(zip(services, costs)))
+state = "Michigan"
+
 conn.close()
