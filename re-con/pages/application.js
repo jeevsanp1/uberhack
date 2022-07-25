@@ -27,7 +27,7 @@ export default function App() {
               <input type="text" id="first" name="first" />
               <button type="submit">Submit</button>
             </form>
-
+          <h1 className={styles.lonfind}><a href='https://www.latlong.net/'>What is my latitude and longitude?</a></h1>
           </main>
     
           <footer className={styles.footer}>
