@@ -1,6 +1,8 @@
 # YouTube Link 📷
 https://youtu.be/Pqzuv-4eReY
 
+The first time we tried to render and upload our video, the video ended up on youtube corrupted. Though we started uploading at about 11:25, which leaves an ample 40 minutes for the upload on youtube, since we had to do it twice as it was corrupted the first time, it took as an extra 30-40 minutes to render and upload the video so that it is not corrupted, and therefore we had to submit at about 12:30. 
+
 # ReCon 🍃🍃  
  Climate change is one of the biggest problems in recent history. With our software Renewable Energy Consultant (ReCon), corporations and individuals can input simple data and can find what energy source and provider is best for their location, budget, and other needs. ReCon can also display tax rebates and other data to benefit the client. ReCon will have a profound impact in the future of the fight against climate change. Our solution uses software to bypass the traditionally costly consultancy which is one of the many factors why renewable resources are so inaccessible to the economically disadvantaged. ReCon will affect the lives of people from all walks of life and shift the tides against climate change.
 
