@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import 'animate.css';
+// import 'animate.css';
 
 export default function Home() {
   return (
