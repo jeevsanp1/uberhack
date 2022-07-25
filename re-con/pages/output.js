@@ -9,9 +9,9 @@ const Output = (props) => {
 
     return (
         <div>
-            Hydro: {cur.hydro}
-            Wind: {cur.wind}
-            Solar: {cur.solar}
+            Hydro: {cur.hydro} <br />
+            Wind: {cur.wind} <br />
+            Solar: {cur.solar} <br />
         </div>
     )
 }
