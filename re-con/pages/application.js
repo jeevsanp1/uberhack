@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useState } from 'react'
 import styles from '../styles/Home.module.css'
+
 import Output from './output'
 
 export default function App() {
@@ -68,20 +69,20 @@ export default function App() {
           </Head>
 
           <main className={styles.main}>
-            <h1 className={styles.apptitle}>
+            <h1 className={styles.renew}>
                 Renewable Energy Consultant
             </h1> 
               
-            <input placeholder="Latitude: " value={lat} onChange={(e) => {
+            <input placeholder="Latitude: " className={styles.Lat} value={lat} onChange={(e) => {
               setLat(e.target.value)
             }} />
-            <input placeholder="Longitude: " value={lng} onChange={(e) => {
+            <input placeholder="Longitude: " className={styles.Lat} value={lng} onChange={(e) => {
               setLng(e.target.value)
             }} />
-            <input placeholder='State: ' value={state} onChange={(e) => {
+            <input placeholder='State: ' className={styles.Lat} value={state} onChange={(e) => {
               setState(e.target.value)
             }} />
-            <input placeholder="Budget: " value={budget} onChange={(e) => {
+            <input placeholder="Budget: " className={styles.Lat} value={budget} onChange={(e) => {
               const x = parseInt(e.target.value);
               if(isNaN(parseInt(e.target.value))) {
                 alert('Invalid Input, must be a number')
@@ -91,12 +92,12 @@ export default function App() {
               }
             }} />
 
-            <p>River Near You: </p> <input type="checkbox" checked={river} onChange={(_) => {
+            <p className={styles.river}>River Near You: </p> <input type="checkbox" className={styles.checkbox} checked={river} onChange={(_) => {
               setRiver(!river)
             }} />
 
-            <button onClick={autoFill}>Auto-Fill Location Data</button>
-            <button onClick={submit}>Submit</button>
+            <button onClick={autoFill} className={styles.Button}>Auto-Fill Location Data</button>
+            <button onClick={submit} className={styles.Button}>Submit</button>
 
           <h1 className={styles.lonfind}><a href='https://www.latlong.net/'>What is my latitude and longitude?</a></h1>
 

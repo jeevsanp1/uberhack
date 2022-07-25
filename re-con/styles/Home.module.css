@@ -1,5 +1,6 @@
 .nav {
  background-color: cadetblue;
+ z-index: 15000;
 }
 .ul {
   list-style-type: none;
@@ -159,6 +160,44 @@
   margin-left: 0.5rem;
 }
 
+.Lat{
+  font-size: 14px;
+  position: relative;
+  border: none;
+  appearance: none;
+  background: #222;
+  padding: 2vh;
+  border-radius: 1vh;
+  width: 250px;
+  margin: 1vh;
+}
+.river{
+  font-size: 3vh;
+}
+
+.checkbox{
+  position: relative;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  margin-bottom: 5%;
+}
+.renew{
+  margin-top: 10vh;
+}
+.Button{
+  background-color: cadetblue;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 2vh;
+  margin-bottom: 1vh;
+}
 @media (max-width: 600px) {
   .grid {
     width: 100%;
