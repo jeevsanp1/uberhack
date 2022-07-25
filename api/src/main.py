@@ -1,11 +1,16 @@
+import datetime
 import math
 
 import requests
 from flask import Flask
-import datetime
-from src.helper import solar_price, hydro_price, wind_price
+from flask_cors import CORS
+
+from src.helper import hydro_price, solar_price, wind_price
+
 
 app = Flask(__name__)
+CORS(app)
+
 
 weather_headers = {
     "x-api-key": "22ee2834c449f1b0a5414e42b3096bbd7d51dcde98c28ce00c38450ee987cb89"
@@ -25,7 +30,7 @@ weather_headers = {
         - Change of Temperature
         - Change of Precipitation
         
-    - Geothermal
+    - Geothermal && Biomass
         - ?
 '''
 

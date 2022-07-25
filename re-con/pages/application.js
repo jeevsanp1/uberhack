@@ -1,8 +1,63 @@
+import axios from 'axios'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useState } from 'react'
 import styles from '../styles/Home.module.css'
+import Output from './output'
 
 export default function App() {
+    const [lng, setLng] = useState('')
+    const [lat, setLat] = useState('')
+    const [state, setState] = useState('')
+    const [budget, setBudget] = useState(null)
+    const [autoed, setAutoed] = useState(false);
+    const [river, setRiver] = useState(false);
+
+    const [hydro, setHydro] = useState(null);
+    const [solar, setSolar] = useState(null);
+    const [wind, setWind] = useState(null);
+
+    const autoFill = () => {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&localityLanguage=en`)
+          .then((res) => {
+            return res.json()
+          })
+          .then((j) => {
+            setAutoed(true);
+            setLat(j.latitude)
+            setLng(j.longitude)
+            setState(j.principalSubdivision)
+          })
+      }, (e) => {
+        console.log(e);
+      }) 
+    }
+
+    const fetcher = () => {
+      const url = (`https://uber-hack-flask-api.herokuapp.com/${lat}/${lng}/${river}/${budget}/${state}`)
+      console.log(url)
+      axios.get(url)
+        .then(res => {
+          if(res.status == 200) {
+            setHydro(res.data.hydro)
+            setSolar(res.data.solar)
+            setWind(res.data.wind)
+          } else {
+            alert('Error Fetching')
+          }
+        })
+    }
+
+    const submit = () => {
+      if(setAutoed && budget != null) {
+        fetcher()
+      } else if(lng != '' && lat != '' && state != '' && budget != null) {
+        fetcher()
+      } else {
+        alert('Error: Fields are Missing')
+      }
+    }
    
     return (
         <div className={styles.container}>
@@ -11,23 +66,43 @@ export default function App() {
             <meta name="description" content="Find Your Future" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
-    
+
           <main className={styles.main}>
             <h1 className={styles.apptitle}>
                 Renewable Energy Consultant
             </h1> 
               
-            <form action="/send-data-here" method="post">
-            
-              <label for="first">Longitude: </label>
-              <input type="text" id="first" name="first" />
-              <label for="first">Latitude: </label>
-              <input type="text" id="first" name="first" />
-              <label for="first">State: </label>
-              <input type="text" id="first" name="first" />
-              <button type="submit">Submit</button>
-            </form>
+            <input placeholder="Latitude: " value={lat} onChange={(e) => {
+              setLat(e.target.value)
+            }} />
+            <input placeholder="Longitude: " value={lng} onChange={(e) => {
+              setLng(e.target.value)
+            }} />
+            <input placeholder='State: ' value={state} onChange={(e) => {
+              setState(e.target.value)
+            }} />
+            <input placeholder="Budget: " value={budget} onChange={(e) => {
+              const x = parseInt(e.target.value);
+              if(isNaN(parseInt(e.target.value))) {
+                alert('Invalid Input, must be a number')
+                setBudget(0)
+              } else {
+                setBudget(x);
+              }
+            }} />
+
+            <p>River Near You: </p> <input type="checkbox" checked={river} onChange={(_) => {
+              setRiver(!river)
+            }} />
+
+            <button onClick={autoFill}>Auto-Fill Location Data</button>
+            <button onClick={submit}>Submit</button>
+
           <h1 className={styles.lonfind}><a href='https://www.latlong.net/'>What is my latitude and longitude?</a></h1>
+
+          {
+            hydro ? <Output hydro={hydro} solar={solar} wind={wind} /> : null
+          }
           </main>
     
           <footer className={styles.footer}>
