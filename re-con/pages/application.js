@@ -14,6 +14,8 @@ export default function App() {
     const [autoed, setAutoed] = useState(false);
     const [river, setRiver] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+
     const [hydro, setHydro] = useState(null);
     const [solar, setSolar] = useState(null);
     const [wind, setWind] = useState(null);
@@ -37,13 +39,14 @@ export default function App() {
 
     const fetcher = () => {
       const url = (`https://uber-hack-flask-api.herokuapp.com/${lat}/${lng}/${river}/${budget}/${state}`)
-      console.log(url)
+      setLoading(true)
       axios.get(url)
         .then(res => {
           if(res.status == 200) {
             setHydro(res.data.hydro)
             setSolar(res.data.solar)
             setWind(res.data.wind)
+            setLoading(false);
           } else {
             alert('Error Fetching')
           }
@@ -100,7 +103,9 @@ export default function App() {
             <button onClick={submit} className={styles.Button}>Submit</button>
 
           <h1 className={styles.lonfind}><a href='https://www.latlong.net/'>What is my latitude and longitude?</a></h1>
-
+          {
+            loading ? <p>Loading ...</p> : null
+          }
           {
             hydro ? <Output hydro={hydro} solar={solar} wind={wind} /> : null
           }

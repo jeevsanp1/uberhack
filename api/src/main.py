@@ -1,12 +1,11 @@
 import datetime
 import math
-import database_manager
+
 import requests
 from flask import Flask
 from flask_cors import CORS
 
 from src.helper import hydro_price, solar_price, wind_price
-
 
 app = Flask(__name__)
 CORS(app)
@@ -33,6 +32,7 @@ weather_headers = {
     - Geothermal && Biomass
         - ?
 '''
+
 
 def get_weather_urls_by_lat_long(lat, long):
     history = f'https://api.ambeedata.com/weather/history/by-lat-lng?lat={lat}&lng={long}'
@@ -193,7 +193,6 @@ def get_pricing(state):
 
 @app.route('/<lat>/<lng>/<river_near>/<max_budget>/<state>')
 def getter_specific(lat, lng, river_near, max_budget, state):
-    suppliers = database_manager.get_suppliers("Services","'"+state+"'")
 
     history_base_url = get_weather_urls_by_lat_long(lat, lng)['history']
     forecast_url = get_weather_urls_by_lat_long(lat, lng)['forecast']
@@ -235,5 +234,4 @@ def getter_specific(lat, lng, river_near, max_budget, state):
     for key in prices:
         if prices[key] <= max_budget:
             scores[key] += 50
-    scores["suppliers"] = suppliers
-    return (scores)
+    return scores

@@ -1,5 +1,5 @@
 import styles from '../styles/Home.module.css'
-import 'animate.css';
+// import 'animate.css';
 
 export const layout = ({children}) => {
   return (
