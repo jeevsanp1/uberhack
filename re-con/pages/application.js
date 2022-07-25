@@ -107,6 +107,7 @@ export default function App() {
             loading ? <p>Loading ...</p> : null
           }
           {
+            
             hydro ? <Output hydro={hydro} solar={solar} wind={wind} /> : null
           }
           </main>
