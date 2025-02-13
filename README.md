@@ -1,5 +1,3 @@
-# YouTube Link 📷
-https://youtu.be/Pqzuv-4eReY
 
 The first time we tried to render and upload our video, the video ended up on youtube corrupted. Though we started uploading at about 11:25, which leaves an ample 40 minutes for the upload on youtube, since we had to do it twice as it was corrupted the first time, it took as an extra 30-40 minutes to render and upload the video so that it is not corrupted, and therefore we had to submit at about 12:30. 
 
